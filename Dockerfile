@@ -5,10 +5,8 @@ MAINTAINER Herval Freire <hervalfreire@gmail.com>
 RUN apt-get update && apt-get install -y git
 RUN apt-get install -y libprotobuf-dev libleveldb-dev libsnappy-dev libopencv-dev libhdf5-serial-dev libatlas-dev libzmq3-dev libboost-all-dev libgflags-dev libgoogle-glog-dev liblmdb-dev protobuf-compiler bc libopenblas-dev
 
-
 # Python + pip
 RUN apt-get install -y python python-dev python-pip python-numpy python-scipy
-
 
 # Caffe
 RUN git clone https://github.com/BVLC/caffe.git /caffe
@@ -29,11 +27,22 @@ ENV PYTHONPATH=/caffe/python
 # Download model
 RUN scripts/download_model_binary.py models/bvlc_googlenet
 
+#VOLUME ["/data"]
 
-VOLUME ["/data"]
+
+## NodeJsWebInterface
+
+RUN apt-get install -qy sudo npm
+RUN sudo npm install -g n
+RUN n latest
+
 
 
 WORKDIR /
 ADD deepdream.py /deepdream.py
+
+
+
+
 
 CMD ["python", "-u", "deepdream.py"]
